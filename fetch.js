@@ -45,17 +45,17 @@ document.addEventListener('DOMContentLoaded', async() =>{
 
 document.getElementById('previous-btn').addEventListener('click', async ()=>{
     const pokemonId = parseInt(localStorage.getItem('pokemonId'));
-    const newId = Math.max(1, pokemonId -1);
-    const pokemon = await fetchPokemon(newId);
-    localStorage.setItem('newID', pokemon.id);
+    const newIdDown = Math.max(1, pokemonId -1);
+    const pokemon = await fetchPokemon(newIdDown);
+    localStorage.setItem('newIdDown', pokemon.id);
     console.log(pokemon.name);
 })
 
 document.getElementById('next-btn').addEventListener('click', async ()=>{
     const pokemonId = parseInt(localStorage.getItem('pokemonId'));
-    const newId = Math.max(1, pokemonId +1);
-    const pokemon = await fetchPokemon(newId);
-    localStorage.setItem('newID', pokemon.id);
+    const newIdUp = Math.max(1, pokemonId +1);
+    const pokemon = await fetchPokemon(newIdUp);
+    localStorage.setItem('newIdUp', pokemon.id);
     console.log(pokemon.name);
 })
 
@@ -80,3 +80,5 @@ fetch('https://jsonplaceholder.typicode.com/posts',{
 //el tamaño e info de la tarjeta es a consideracion personal
 //la tarjeta debe mantenerse en la pantalla
 //la info para la tarjeta puede venir de localStorage - fetch
+
+const CARD_SECTION = document.getElementById('pokeCard');
