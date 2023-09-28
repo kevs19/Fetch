@@ -23,6 +23,20 @@ const fetchPokemon = async (pokemon) => {
     }
 }
 
+
+const initialFuction = async () => {
+    document.addEventListener('DOMContentLoaded', async() =>{
+        const storeId = localStorage.getItem('pokemonId');
+        const initialId = storeId ? parseInt(storeId):1;
+        const pokemon = await fetchPokemon(initialId);
+        localStorage.setItem('pokemonId', pokemon.id);
+        document.getElementById('poke-name').value = pokemon.name;
+        localStorage.setItem('pokemonInfo', JSON.stringify(pokemon));
+        setPokemonCard();
+})
+}
+
+
 //obtener pokemon
 document.getElementById("get-btn")
     .addEventListener('click', async () => {
@@ -30,33 +44,38 @@ document.getElementById("get-btn")
         const pokemon = await fetchPokemon(text);
         localStorage.setItem('pokemonId', pokemon.id);
         console.log(pokemon.name);
+        document.getElementById('poke-name').value = pokemon.name;
+        localStorage.setItem('pokemonInfo', JSON.stringify(pokemon));
+        setPokemonCard();
     })
-
-document.addEventListener('DOMContentLoaded', async() =>{
-    const storeId = localStorage.getItem('pokemonId');
-    const initialId = storeId ? parseInt(storeId):1;
-    const pokemon = await fetchPokemon(initialId);
-    console.log(pokemon.name);
-})
 
 
 //obtener el anterior
 //obtener el siguiente
 
+
 document.getElementById('previous-btn').addEventListener('click', async ()=>{
     const pokemonId = parseInt(localStorage.getItem('pokemonId'));
-    const newIdDown = Math.max(1, pokemonId -1);
+    const newIdDown = Math.max(1, pokemonId)-1;
     const pokemon = await fetchPokemon(newIdDown);
-    localStorage.setItem('newIdDown', pokemon.id);
     console.log(pokemon.name);
-})
+    localStorage.setItem('pokemonId', pokemon.id);
+    document.getElementById('poke-name').value = pokemon.name;
+    localStorage.setItem('pokemonInfo', JSON.stringify(pokemon));
+    setPokemonCard();
+});
+
+
 
 document.getElementById('next-btn').addEventListener('click', async ()=>{
     const pokemonId = parseInt(localStorage.getItem('pokemonId'));
-    const newIdUp = Math.max(1, pokemonId +1);
+    const newIdUp = Math.max(1, pokemonId) +1;
     const pokemon = await fetchPokemon(newIdUp);
-    localStorage.setItem('newIdUp', pokemon.id);
     console.log(pokemon.name);
+    localStorage.setItem('pokemonId', pokemon.id);
+    document.getElementById('poke-name').value = pokemon.name;
+    localStorage.setItem('pokemonInfo', JSON.stringify(pokemon));
+    setPokemonCard();    
 })
 
 //Post
@@ -81,4 +100,15 @@ fetch('https://jsonplaceholder.typicode.com/posts',{
 //la tarjeta debe mantenerse en la pantalla
 //la info para la tarjeta puede venir de localStorage - fetch
 
-const CARD_SECTION = document.getElementById('pokeCard');
+function setPokemonCard() {
+    let pokeInfo = localStorage.getItem('pokemonInfo');
+    pokeInfo = JSON.parse(pokeInfo);
+    document.getElementById('poke-img-front').src = pokeInfo.sprites.front_default;
+    document.getElementById('poke-name-card').textContent = pokeInfo.name;
+    document.getElementById('poke-id').textContent = pokeInfo.id;
+    document.getElementById('poke-weight').textContent = `${ (parseInt(pokeInfo.weight)*0.1).toFixed(2) } kg`;
+    
+    document.getElementById('poke-abilities').innerHTML = habilidades;
+
+    document.getElementById('poke-card').style.display = 'inline-block';
+}
